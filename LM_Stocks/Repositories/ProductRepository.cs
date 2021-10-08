@@ -1,0 +1,94 @@
+﻿using LM_Stocks.Models;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace LM_Stocks.Repositories
+{
+    public class ProductRepository : IProductRepository
+    {
+        private readonly IDbConnection DbConnection;
+
+        public ProductRepository()
+        {
+            this.DbConnection = new SqlConnection("Server=localhost;database=LM_Stocks;user=sa;password=teddy.2001");
+            this.DbConnection.Open();
+        }
+        ~ProductRepository()
+        {
+            if (this.DbConnection != null)
+                this.DbConnection.Close();
+        }
+
+        public Product Add(Product product)
+        {
+            IDbCommand insert = DbConnection.CreateCommand();
+            insert.CommandText = "INSERT INTO Products (Name, Price, Validity, Lot, Weight, Quantity) VALUES (@Name, @Price, @Validity, @Lot, @Weight, @Quantity);";
+
+            IDbDataParameter paramName = new SqlParameter("Name", product.Name);
+            IDbDataParameter paramPrice = new SqlParameter("Price", product.Price);
+            IDbDataParameter paramValidity = new SqlParameter("Validity", product.Validity);
+            IDbDataParameter paramLot = new SqlParameter("Lot", product.Lot);
+            IDbDataParameter paramWeight = new SqlParameter("Weigth", product.Weight);
+            IDbDataParameter paramQuantity = new SqlParameter("Quantity", product.Quantity);
+            IDbDataParameter paramDescription = new SqlParameter("Description", product.Description);
+
+            insert.Parameters.Add(paramName);
+            insert.Parameters.Add(paramPrice);
+            insert.Parameters.Add(paramValidity);
+            insert.Parameters.Add(paramLot);
+            insert.Parameters.Add(paramWeight);
+            insert.Parameters.Add(paramQuantity);
+            insert.Parameters.Add(paramDescription);
+
+            var rowsAffected = insert.ExecuteNonQuery();
+
+            if (rowsAffected > 0)
+                return product;
+
+            return default;
+        }
+
+        public Product Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Product> GetAll()
+        {
+            ICollection<Product> list = new Collection<Product>();
+
+            IDbCommand select = DbConnection.CreateCommand();
+            select.CommandText = "SELECT ID, Name, Price, Validity, Lot, Weight, Quantity, Description FROM Products;";
+
+            using (var reader = select.ExecuteReader())
+                while (reader.Read())
+                    list.Add(new Product()
+                    {
+                        ID = Convert.ToInt32(reader["ID"]),
+                        Name = Convert.ToString(reader["Name"]),
+                        Price = Convert.ToDecimal(reader["Price"]),
+                        Validity = Convert.ToDateTime(reader["Validity"]),
+                        Lot = Convert.ToString(reader["Lot"]),
+                        Weight = Convert.ToDecimal(reader["Weight"]),
+                        Quantity = Convert.ToInt32(reader["Quantity"]),
+                        Description = Convert.ToString(reader["Description"])
+                    });
+            return list;
+        }
+
+        public bool Remove(Product entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Product Update(Product entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

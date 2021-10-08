@@ -15,7 +15,7 @@ namespace LM_Stocks.Repositories
 
         public ProductRepository()
         {
-            this.DbConnection = new SqlConnection("Server=localhost;database=LM_Stocks;user=sa;password=teddy.2001");
+            this.DbConnection = new SqlConnection("Server=localhost;database=LM_Stocks;user=sa;password=******");
             this.DbConnection.Open();
         }
         ~ProductRepository()

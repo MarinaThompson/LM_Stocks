@@ -27,5 +27,27 @@ namespace LM_Stocks.Controllers
         {
             return StatusCode(200, productRespository.GetAll());
         }
+
+        //POST: /products
+        [HttpPost]
+        [Route("/products")]
+        public IActionResult Create([Bind("Name, Price, Weight, Quantity, Lot, Validity, Description")] Product product)
+        {
+            if (ModelState.IsValid)
+            {
+              product = new Product()
+                {
+                    Name = product.Name,
+                    Price = product.Price,
+                    Weight = product.Weight,
+                    Quantity = product.Quantity,
+                    Lot = product.Lot,
+                    Validity = product.Validity,
+                    Description = product.Description
+                };
+            }
+
+            return StatusCode(201, productRespository.Add(product));
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace LM_Stocks.Repositories
 
         public ProductRepository()
         {
-            this.DbConnection = new SqlConnection("Server=localhost;database=LM_Stocks;user=sa;password=******");
+            this.DbConnection = new SqlConnection("Server=localhost;database=LM_Stocks;user=sa;password=*****");
             this.DbConnection.Open();
         }
         ~ProductRepository()
@@ -27,13 +27,13 @@ namespace LM_Stocks.Repositories
         public Product Add(Product product)
         {
             IDbCommand insert = DbConnection.CreateCommand();
-            insert.CommandText = "INSERT INTO Products (Name, Price, Validity, Lot, Weight, Quantity) VALUES (@Name, @Price, @Validity, @Lot, @Weight, @Quantity);";
+            insert.CommandText = "INSERT INTO Products (Name, Price, Validity, Lot, Weight, Quantity, Description) VALUES (@Name, @Price, @Validity, @Lot, @Weight, @Quantity, @Description);";
 
             IDbDataParameter paramName = new SqlParameter("Name", product.Name);
             IDbDataParameter paramPrice = new SqlParameter("Price", product.Price);
             IDbDataParameter paramValidity = new SqlParameter("Validity", product.Validity);
             IDbDataParameter paramLot = new SqlParameter("Lot", product.Lot);
-            IDbDataParameter paramWeight = new SqlParameter("Weigth", product.Weight);
+            IDbDataParameter paramWeight = new SqlParameter("Weight", product.Weight);
             IDbDataParameter paramQuantity = new SqlParameter("Quantity", product.Quantity);
             IDbDataParameter paramDescription = new SqlParameter("Description", product.Description);
 

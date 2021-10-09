@@ -49,5 +49,33 @@ namespace LM_Stocks.Controllers
 
             return StatusCode(201, productRespository.Add(product));
         }
+
+        //GET: /products/5
+        [HttpGet]
+        [Route("/products/{id}")]
+        public IActionResult Details(int id)
+        {
+            return StatusCode(200, productRespository.Get(id));
+        }
+
+        //DELETE: /products/5
+        [HttpDelete]
+        [Route("products/{id}")]
+        public IActionResult Delete(int id)
+        {
+            if (productRespository.Remove(id))
+            {
+                return StatusCode(204);
+            }
+            return default;
+        }
+
+        //PUT: /products/5
+        [HttpPut]
+        [Route("/products/{id}")]
+        public IActionResult Update(Product product, int id)
+        {
+            return StatusCode(200, productRespository.Update(product, id));
+        }
     }
 }

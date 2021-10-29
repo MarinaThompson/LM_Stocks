@@ -1,5 +1,6 @@
 ﻿using LM_Stocks.Models;
 using LM_Stocks.Repositories;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LM_Stocks.Controllers
 {
-    [Route("api/[controller]")]
+    [EnableCors("Policy")]
     [ApiController]
     public class ProductsController : ControllerBase
     {

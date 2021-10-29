@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LM_Stocks.Repositories
 {
@@ -15,13 +13,14 @@ namespace LM_Stocks.Repositories
 
         public ProductRepository()
         {
-            this.DbConnection = new SqlConnection("Server=localhost;database=LM_Stocks;user=sa;password=******");
-            this.DbConnection.Open();
+            DbConnection = new SqlConnection("Server=localhost;database=LM_Stocks;user=sa;password=teddy.2001");
+            DbConnection.Open();
+            
         }
         ~ProductRepository()
         {
-            if (this.DbConnection != null)
-                this.DbConnection.Close();
+            if (DbConnection != null)
+                DbConnection.Dispose();
         }
 
         public Product Add(Product product)
@@ -47,10 +46,13 @@ namespace LM_Stocks.Repositories
 
             var rowsAffected = insert.ExecuteNonQuery();
 
+            DbConnection.Close();
+
             if (rowsAffected > 0)
                 return product;
 
             return default;
+           
         }
 
         public Product Get(int id)
@@ -77,6 +79,8 @@ namespace LM_Stocks.Repositories
                         Quantity = Convert.ToInt32(reader["Quantity"]),
                         Description = Convert.ToString(reader["Description"])
                     };
+            DbConnection.Close();
+
             return product;
         }
 
@@ -100,6 +104,8 @@ namespace LM_Stocks.Repositories
                         Quantity = Convert.ToInt32(reader["Quantity"]),
                         Description = Convert.ToString(reader["Description"])
                     });
+            DbConnection.Close();
+
             return list;
         }
 
@@ -112,6 +118,8 @@ namespace LM_Stocks.Repositories
             remove.Parameters.Add(paramId);
 
             var rowsAffected = remove.ExecuteNonQuery();
+
+            DbConnection.Close();
 
             return rowsAffected > 0;
         }
@@ -141,10 +149,13 @@ namespace LM_Stocks.Repositories
 
             var rowsAffected = update.ExecuteNonQuery();
 
+            DbConnection.Close();
+
             if (rowsAffected > 0)
                 return entity;
 
             return default;
+
 
         }
     }

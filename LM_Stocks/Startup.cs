@@ -30,6 +30,17 @@ namespace LM_Stocks
             services.
                 AddTransient<IProductRepository, ProductRepository>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Policy",
+                     builder =>
+                     {
+                         builder.AllowAnyOrigin()
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
+                     });
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -47,9 +58,12 @@ namespace LM_Stocks
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LM_Stocks v1"));
             }
 
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
